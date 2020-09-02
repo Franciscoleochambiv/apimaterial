@@ -8,9 +8,9 @@ const path = require('path');
 const morgan =  require("morgan");
 
 
-//const mysql = require('mysql');
+const mysql = require('mysql');
 
-//const myConnection = require('express-myconnection');
+const myConnection = require('express-myconnection');
 
 
 
@@ -98,19 +98,19 @@ const URI = process.env.MONGOOSE_URI
 ///////////////////////////////////////////////////////////
 
 
-/*
+
 
 // middlewares
 app.use(morgan('dev'));
 app.use(myConnection(mysql, {
-    host: 'adryan2.sytes.net',
-    user: 'pancho',
+    host: 'mysql-12180-0.cloudclusters.net',
+    user: 'fran',
     password: '12345678',
-    port: 3306,
+    port: 12180,
     database: 'serapio'
 }, 'single'));
 
-*/
+
 
 
 
