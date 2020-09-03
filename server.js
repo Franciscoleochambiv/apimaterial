@@ -98,7 +98,7 @@ const URI = process.env.MONGOOSE_URI
 ///////////////////////////////////////////////////////////
 
 
-
+/*
 
 // middlewares
 app.use(morgan('dev'));
@@ -110,7 +110,19 @@ app.use(myConnection(mysql, {
     database: 'serapio'
 }, 'single'));
 
+*/
 
+
+
+// middlewares
+app.use(morgan('dev'));
+app.use(myConnection(mysql, {
+    host: 'adryan2.sytes.net',
+    user: 'lolo5',
+    password: '12345678',
+    port: 3306,
+    database: 'serapio'
+}, 'single'));
 
 
 
