@@ -107,7 +107,7 @@ app.use(myConnection(mysql, {
     host: '201.230.180.172',
     user: 'fran',
     password: '12345678',
-    port: 12180,
+    port: 3360,
     database: 'serapio'
 }, 'single'));
 
