@@ -178,8 +178,8 @@ router.get("/producto", (req, res) => {
 
     passport.authenticate("jwt", { session: false }),
     console.log(req.body);
-    req.getConnection((err, conn) => {
-      pool.query('SELECT * FROM Categorias order by  descripcion', (err, customers) => {
+    pool.getConnection((err, conn) => {
+      conn.query('SELECT * FROM Categorias order by  descripcion', (err, customers) => {
 
       
           if (err) {
