@@ -142,6 +142,7 @@ router.get("/productos", (req, res) => {
         }
 
         res.json(customers);
+        conn.release();
         //res.render('customers', {
          //   data: customers
         //});
@@ -162,6 +163,7 @@ router.get("/producto", (req, res) => {
         }
 
         res.json(customers);
+        conn.release();
         //res.render('customers', {
          //   data: customers
         //});
@@ -187,6 +189,7 @@ router.get("/producto", (req, res) => {
           }
   
           res.json(customers);
+          conn.release();
           //res.render('customers', {
            //   data: customers
           //});
