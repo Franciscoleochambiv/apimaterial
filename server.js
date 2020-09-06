@@ -101,7 +101,11 @@ const URI = process.env.MONGOOSE_URI
 
 //saatabases
 // middlewares
+
 app.use(morgan('dev'));
+
+
+/*
 app.use(myConnection(mysql, {
 //    host: 'mysql-12180-0.cloudclusters.net',
     host: 'adryan2.sytes.net',
@@ -112,7 +116,7 @@ app.use(myConnection(mysql, {
     database: 'shopingweb'
 }, 'single'));
 
-
+*/
 
 /*
 

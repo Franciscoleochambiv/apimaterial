@@ -10,6 +10,24 @@ const validateTipoInput = require("../../validation/shoping1.js");
 //const validateLoginInput = require("../../validation/login.js");
 
 const Tdocumento = require("../../models/Shoping1");
+const mysql = require('mysql');
+
+
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    host: 'adryan2.sytes.net',
+    user: 'pancho',
+    password: '12345678',
+    port: 3306,    
+    database: 'shopingweb'
+});
+
+
+
+    
+
+
+
 
 
 
@@ -92,13 +110,31 @@ router.get("/view2", (req, res) => {
     });
 });  
 });
+
+
+
+pool.getConnection(function(err, connection){
+if(err){
+    return cb(err);
+}
+connection.changeUser({database : "firm1"});
+connection.query("SELECT * from history", function(err, data){
+    connection.release();
+    cb(err, data);
+});
+});
+
 */
 
 router.get("/productos", (req, res) => {
 
   passport.authenticate("jwt", { session: false }),
   console.log(req.body);
-  req.getConnection((err, conn) => {
+
+
+
+
+  pool.getConnection((err, conn) => {
   conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
     //conn.query('select  * FROM tec_blog', (err, customers) => {
         if (err) {
@@ -119,7 +155,7 @@ router.get("/producto", (req, res) => {
 
   passport.authenticate("jwt", { session: false }),
   console.log(req.body);
-  req.getConnection((err, conn) => {
+  pool.getConnection((err, conn) => {
     conn.query('select articulos.id,articulos.codigo,articulos.imagen, articulos.descripcion,Categorias.descripcion as category,articulos.detalle,articulos.precio from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo', (err, customers) => {  
         if (err) {
             res.json(err);
