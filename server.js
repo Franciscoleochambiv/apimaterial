@@ -103,12 +103,12 @@ const URI = process.env.MONGOOSE_URI
 // middlewares
 app.use(morgan('dev'));
 app.use(myConnection(mysql, {
-    host: 'mysql-12180-0.cloudclusters.net',
-//    host: '201.230.180.172',
-    user: 'fran',
+//    host: 'mysql-12180-0.cloudclusters.net',
+    host: 'adryan2.sytes.net',
+    user: 'pancho',
     password: '12345678',
-    port: 12180,
-   // port: 3306,    
+   // port: 12180,
+    port: 3306,    
     database: 'serapio'
 }, 'single'));
 
