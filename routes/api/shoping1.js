@@ -394,8 +394,8 @@ router.get("/viewcat/:id",
 
 router.post("/card", async (req, res) => {
   const { id, amount } = req.body;
-  //const stripe = new Stripe("sk_live_sJMz90XCpVwGtMMcKTenrdQd006T69otUo");
-  const stripe = new Stripe("sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
+  const stripe = new Stripe("sk_live_sJMz90XCpVwGtMMcKTenrdQd006T69otUo");
+  //sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
   console.log(req.body);
   console.log("mointaq a pagar ")
   console.log(req.body.amount)
@@ -421,21 +421,15 @@ router.post("/card", async (req, res) => {
         amount: req.body.amount,
         currency: 'usd',
         source: id,
-      })
         description: "Venta Exitosa",
         receipt_email: 'grupo80pr@gmail.com'
        // customer:req.body.customer,
        // destination:req.body.dire
 
+      })
   
       console.log(charge);
-
-      
-      
-
-
-
-
+  
       return (
       res.status(200).json({
         confirm: "EXITO"
@@ -457,56 +451,6 @@ router.post("/card", async (req, res) => {
 
  
 });
-
-/*
-
-
-router.post("/pedidoweb", (req, res) => {
-
-  passport.authenticate("jwt", { session: false }),
-  console.log(req.body);
-  var seriec ="1";
-  var numero_ticket="200";
-  var fecha ="now()";
-  //now(),
-  var tdoc="30";
-  var ncli="1";
-  var pagado="0";
-  var fpago="CONTADO";
-  var observa="onservaciones";
-  var vendedor="taqyu"
-  var dvcanulado="0";
-  var guia="0";
-  var caja="1";
-  var Empresa="1";
-  var dvcnc="0";
-  var serien=" ";
-  var dvcsaldo="0";
-  var pendiente="0";
-  cadena="Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Observaciones,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente) values(";
-  cadena=cadena+seriec+","+numero_ticket+","+fecha+","+fecha+","+tdoc+","+ncli+","+pagado+","+fpago+","+observa+","+vendedor+","+dvcanulado+","+guia+","+caja+","+Empresa+","+dvcnc+","+serien+","+dvcsaldo+","+pendiente;
-
-
-  pool.getConnection((err, conn) => {
-    conn.query(cadena, (err, customers) => {  
-        if (err) {
-            res.json(err);
-        }
-
-        res.json(customers);
-        conn.release();
-        //res.render('customers', {
-         //   data: customers
-        //});
-    });
-});  
-});
-
-
-
-*/
-
-
 
 
 module.exports = router;
