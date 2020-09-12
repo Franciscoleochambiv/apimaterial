@@ -394,8 +394,9 @@ router.get("/viewcat/:id",
 
 router.post("/card", async (req, res) => {
   const { id, amount } = req.body;
-  const stripe = new Stripe("sk_live_sJMz90XCpVwGtMMcKTenrdQd006T69otUo");
+  //const stripe = new Stripe("sk_live_sJMz90XCpVwGtMMcKTenrdQd006T69otUo");
   //sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
+  const stripe = new Stripe("sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
   console.log(req.body);
   console.log("mointaq a pagar ")
   console.log(req.body.amount)
@@ -429,6 +430,29 @@ router.post("/card", async (req, res) => {
       })
   
       console.log(charge);
+
+      var cadena=" into DocVentaCabweb(DVC_Serie) value ('1')";
+
+
+      pool.getConnection((err, conn) => {
+        conn.query(cadena, (err, customers) => {  
+            if (err) {
+                res.json(err);
+            }
+    
+            res.json(customers);
+            conn.release();
+            //res.render('customers', {
+             //   data: customers
+            //});
+        });
+
+      });
+
+
+        
+
+
   
       return (
       res.status(200).json({
@@ -451,6 +475,13 @@ router.post("/card", async (req, res) => {
 
  
 });
+
+
+
+
+
+
+
 
 
 module.exports = router;
