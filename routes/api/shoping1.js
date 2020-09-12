@@ -431,9 +431,9 @@ router.post("/card", async (req, res) => {
   
       console.log(charge);
 
-      //var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_) value ('1'"+"" +")";
-     // var  cadena3="0";
-
+     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng) value ('1','now()','now()')";
+     var  cadena3="0";
+/*
      var numero_ticket='200';
      var fecha ='now()';
      var tdoc='30';
@@ -454,11 +454,11 @@ router.post("/card", async (req, res) => {
     var  cadena="Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Observaciones,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente) values(";
     var  cadena2=cadena+seriec+","+numero_ticket+","+fecha+","+fecha+","+tdoc+","+ncli+","+pagado+","+fpago+","+observa+","+vendedor+","+dvcanulado+","+guia+","+caja+","+Empresa+","+dvcnc+","+serien+","+dvcsaldo+","+pendiente+")";
      
-
+*/
 
 
       pool.getConnection((err, conn) => {
-        conn.query(cadena2, (err, customers) => {  
+        conn.query(cadena, (err, customers) => {  
             if (err) {
                 res.json(err);
             }
