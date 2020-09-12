@@ -458,45 +458,33 @@ router.post("/card", async (req, res) => {
  
 });
 
-
+/*
 
 
 router.post("/pedidoweb", (req, res) => {
 
   passport.authenticate("jwt", { session: false }),
   console.log(req.body);
-  /*
-  amount: totalPrice2,
-  id:token.id,
-  nom:this.state.nom,
-  dire:this.state.dire,
-  telf:this.state.telf
-  $consul="Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Observaciones,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente) values($seriec,$numero_ticket,now(),now(),$tdoc,$ncli,'0','CONTADO','$observa','$vendedor','0','0',$caja,$Empresa,'0','','0','0')";
-
- */ 
-
-var seriec ="1";
-var numero_ticket="200";
-var fecha ="now()";
-//now(),
-var tdoc="30";
-var ncli="1";
-var pagado="0";
-var fpago="CONTADO";
-var observa="onservaciones";
-var vendedor="taqyu"
-var dvcanulado="0";
-var guia="0";
-var caja="1";
-var Empresa="1";
-var dvcnc="0";
-var serien=" ";
-var dvcsaldo="0";
-var pendiente="0";
-
-
-cadena="Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Observaciones,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente) values(";
-cadena=cadena+seriec+","+numero_ticket+","+fecha+","+fecha+","+tdoc+","+ncli+","+pagado+","+fpago+","+observa+","+vendedor+","+dvcanulado+","+guia+","+caja+","+Empresa+","+dvcnc+","+serien+","+dvcsaldo+","+pendiente;
+  var seriec ="1";
+  var numero_ticket="200";
+  var fecha ="now()";
+  //now(),
+  var tdoc="30";
+  var ncli="1";
+  var pagado="0";
+  var fpago="CONTADO";
+  var observa="onservaciones";
+  var vendedor="taqyu"
+  var dvcanulado="0";
+  var guia="0";
+  var caja="1";
+  var Empresa="1";
+  var dvcnc="0";
+  var serien=" ";
+  var dvcsaldo="0";
+  var pendiente="0";
+  cadena="Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Observaciones,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente) values(";
+  cadena=cadena+seriec+","+numero_ticket+","+fecha+","+fecha+","+tdoc+","+ncli+","+pagado+","+fpago+","+observa+","+vendedor+","+dvcanulado+","+guia+","+caja+","+Empresa+","+dvcnc+","+serien+","+dvcsaldo+","+pendiente;
 
 
   pool.getConnection((err, conn) => {
@@ -516,7 +504,7 @@ cadena=cadena+seriec+","+numero_ticket+","+fecha+","+fecha+","+tdoc+","+ncli+","
 
 
 
-
+*/
 
 
 
