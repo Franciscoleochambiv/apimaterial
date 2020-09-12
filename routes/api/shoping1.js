@@ -431,7 +431,7 @@ router.post("/card", async (req, res) => {
   
       console.log(charge);
 
-      var cadena=" into DocVentaCabweb(DVC_Serie) value ('1')";
+      var cadena= "Insert into DocVentaCabweb(DVC_Serie) value ('1')";
 
 
       pool.getConnection((err, conn) => {
