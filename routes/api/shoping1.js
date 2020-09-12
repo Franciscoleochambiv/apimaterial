@@ -430,8 +430,9 @@ router.post("/card", async (req, res) => {
       })
   
       console.log(charge);
+      var idfinal="'"+req.body.id+"'";
 
-     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng) value ('1',"+req.body.id+",now(),now()"+")";
+     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng) value ('1',"+idfinal+",now(),now()"+")";
      var  cadena3="0";
 /*
      var numero_ticket='200';
