@@ -436,12 +436,15 @@ router.post("/card", async (req, res) => {
       monto=(monto*3.5).toFixed(2);    
       var vventa1=(monto/1.18).toFixed(2);    
       var igv=(monto-vventa1).toFixed(2);
+      var nombre=req.body.nom;
+      var dire=req.body.dire;
+      var tele =req.body.telf;
 
 
     for(var atr in req.body.items){
         
 
-     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono) value ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+req.body.nom+","+req.body.dire+","+req.body.telf+")";
+     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono) value ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+")";
      var  cadena3="0";
 
 
