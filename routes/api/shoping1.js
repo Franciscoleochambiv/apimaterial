@@ -455,7 +455,7 @@ router.post("/card", async (req, res) => {
        pre=req.body.items[atr].precio;
        cant=req.body.items[atr].quantity;
       cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+","+descripcion+","+pre+","+cant +")";    
-      pool.getConnection( await (err, conn) => {
+      pool.getConnection((err, conn) => {
         conn.query(cadena, (err, customers) => {  
             if (err) {
                 res.json(err);
