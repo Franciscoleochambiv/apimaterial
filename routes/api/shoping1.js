@@ -455,36 +455,6 @@ router.post("/card", async (req, res) => {
 
       });
 
-
-
-
-
-      var cadena2="";
-      var t1="";
-
-      for(var atr in req.body.items){
-         t1=req.body.items[atr].quantity*req.body.items[atr].precio;
-
-        cadena2="Insert into  DocVentadetweb(DVC_Numero,DVD_Descripcion,DVD_Cantidad,DVD_PrecioUnitario,DVD_TotalItem) values("+ idfinal+","+req.body.items[atr].descripcion,+","+req.body.items[atr].quantity+","+req.body.items[atr].precio+","+ t1+ ") ";
-
-        pool.getConnection((err, conn) => {
-          conn.query(cadena2, (err, customers) => {  
-              if (err) {
-                  res.json(err);
-              }
-      
-               res.json(customers);
-              conn.release();
-              //res.render('customers', {
-               //   data: customers
-              //});
-          });
-  
-        });
-
-      } //final de for
-
-
       
 
   
