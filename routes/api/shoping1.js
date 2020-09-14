@@ -439,31 +439,8 @@ router.post("/card", async (req, res) => {
 
      var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto) value ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv +")";
      var  cadena3="0";
-/*
-     var numero_ticket='200';
-     var fecha ='now()';
-     var tdoc='30';
-     var ncli='1';
-     var pagado='0';
-     var fpago="'CONTADO'";
-     var observa="'onservaciones'";
-     var vendedor="'taqyu'";
-     var dvcanulado='0';
-     var guia='0';
-     var caja='1';
-     var Empresa='1';
-     var dvcnc='0';
-     var serien='0';
-     var dvcsaldo='0';
-     var pendiente='0';
 
-    var  cadena="Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Observaciones,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente) values(";
-    var  cadena2=cadena+seriec+","+numero_ticket+","+fecha+","+fecha+","+tdoc+","+ncli+","+pagado+","+fpago+","+observa+","+vendedor+","+dvcanulado+","+guia+","+caja+","+Empresa+","+dvcnc+","+serien+","+dvcsaldo+","+pendiente+")";
-     
-*/
-
-
-      pool.getConnection((err, conn) => {
+     pool.getConnection((err, conn) => {
         conn.query(cadena, (err, customers) => {  
             if (err) {
                 res.json(err);
@@ -477,6 +454,55 @@ router.post("/card", async (req, res) => {
         });
 
       });
+
+
+      //grabando los items
+      //this.props.checkedOutItems  
+      //var items=req.body.items;
+
+      /*<TableRow key={item.id}>
+                  <TableCell>{item.descripcion}</TableCell>
+                  <TableCell>{item.precio}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+*/
+      var cadena2="";
+      var t1="";
+
+      for(var atr in req.body.items){
+         t1=req.body.items[atr].quantity*req.body.items[atr].precio;
+
+        cadena2="Insert into  DocVentadetweb(DVC_Numero,DVD_Descripcion,DVD_Cantidad,DVD_PrecioUnitario,DVD_TotalItem) values("+ idfinal+","+req.body.items[atr].descripcion,+","+req.body.items[atr].quantity+","+req.body.items[atr].precio+","+ t1+ ") ";
+
+        pool.getConnection((err, conn) => {
+          conn.query(cadena2, (err, customers) => {  
+              if (err) {
+                  res.json(err);
+              }
+      
+               res.json(customers);
+              conn.release();
+              //res.render('customers', {
+               //   data: customers
+              //});
+          });
+  
+        });
+  
+           
+
+
+
+        
+
+        });
+       // console.log(newItem);
+       //await newItem.save();
+      }
+
+
+
+
+
 
 
         
