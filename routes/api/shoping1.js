@@ -456,15 +456,9 @@ router.post("/card", async (req, res) => {
       });
 
 
-      //grabando los items
-      //this.props.checkedOutItems  
-      //var items=req.body.items;
 
-      /*<TableRow key={item.id}>
-                  <TableCell>{item.descripcion}</TableCell>
-                  <TableCell>{item.precio}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-*/
+
+
       var cadena2="";
       var t1="";
 
@@ -487,26 +481,11 @@ router.post("/card", async (req, res) => {
           });
   
         });
-  
-           
+
+      } //final de for
 
 
-
-        
-
-        });
-       // console.log(newItem);
-       //await newItem.save();
-      }
-
-
-
-
-
-
-
-        
-
+      
 
   
       return (
