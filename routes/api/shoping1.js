@@ -432,9 +432,11 @@ router.post("/card", async (req, res) => {
       console.log(charge);
       var idfinal="'"+req.body.id+"'";
       var obser= "'"+req.body.nom+req.body.dire+req.body.telf+"'";
-      var monto =req.body.amount;
+      var monto =(req.body.amount/100).toFixed(2);    
+      var vventa1=(monto/1.18).toFixed(2);    
+      var igv=(monto-vventa1).toFixed(2);
 
-     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones) value ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+")";
+     var cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total) value ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+")";
      var  cadena3="0";
 /*
      var numero_ticket='200';
