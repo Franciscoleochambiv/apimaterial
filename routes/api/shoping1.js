@@ -69,7 +69,7 @@ async function grabacion(cadena4){
 
 //var  cadena4   =  await sumacadena(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele); 
 
- async function sumacadena(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele){
+ async function sumacadena(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email){
     
    var descripcion="";
    var pre=0;
@@ -80,13 +80,15 @@ async function grabacion(cadena4){
   for(var atr in data){
            
     descripcion ="'"+data[atr].descripcion+"'";
+    codigo="'"+data[atr].codigo+"'";
+
     pre=data[atr].precio;
     cant=data[atr].quantity;
 
     
 
 
-     cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+","+descripcion+","+pre+","+cant +");";    
+     cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad,DVC_Codigo,DVC_Dni,DVC_Email) VALUES ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+","+descripcion+","+pre+","+cant +","+codigo+","+dni+","+email +");";    
 
      var  cadena5   =  await grabacion(cadena); 
 
@@ -483,7 +485,7 @@ router.post("/card", async (req, res) => {
   //const stripe = new Stripe("sk_live_sJMz90XCpVwGtMMcKTenrdQd006T69otUo");
   //sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
   const stripe = new Stripe("sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
-  //console.log(req.body);
+  console.log(req.body);
  // console.log("mointaq a pagar ")
  // console.log(req.body.amount)
 
@@ -525,6 +527,8 @@ router.post("/card", async (req, res) => {
       var nombre="'"+req.body.nom+"'";
       var dire="'"+req.body.dire+"'";
       var tele ="'"+req.body.telf+"'";
+      var dni ="'"+req.body.dni+"'";
+      var email ="'"+req.body.email+"'";
 
 
       //descripcion precio  quantity
@@ -534,7 +538,7 @@ router.post("/card", async (req, res) => {
     //console.log(req.body.items); 
 
 
-    var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele);
+    var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email);
   
 
 
