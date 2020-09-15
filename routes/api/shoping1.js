@@ -24,9 +24,95 @@ var pool  = mysql.createPool({
 
 
 
+
+
+async function grabacion(cadena4){
+
+       //   console.log(cadena4);
+
+
+       //var cadena5="Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1','tok_1HRcUSF6gyyMYSrKMishtZev',now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1','francocalle molsd',269.99,228.81,41.18,'franco','calle molsd','','GABIENTE MICRONICS TARTARO - FNT 8005',120,1);Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1','tok_1HRcUSF6gyyMYSrKMishtZev',now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1','francocalle molsd',269.99,228.81,41.18,'franco','calle molsd','','GAMER MACHINE CONCORDE - MIC C813',150,1);";
+      
+
+
+       pool.getConnection((err, conn) => {
+         conn.query (cadena4, (err, customers) => {  
+          if (err) {
+            console.log(err);
+             // res.json(err);
+          }
+
+          console.log(customers)
+  
+          // res.json(customers);
+          conn.release();
+
+        //  console.log("se ha grando");
+          var mensaje="se hya grabado";
+
+              return mensaje;
+
+          
+         //await  conn.close();
+          //res.render('customers', {
+           //   data: customers
+          //});
+      });
+
+    });
+
+    
+
+  }
+
+
+
+//var  cadena4   =  await sumacadena(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele); 
+
+ async function sumacadena(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele){
+    
+   var descripcion="";
+   var pre=0;
+   var cant=0;
+   var cadena="";
+   var cadena3="";
+
+  for(var atr in data){
+           
+    descripcion ="'"+data[atr].descripcion+"'";
+    pre=data[atr].precio;
+    cant=data[atr].quantity;
+
     
 
 
+     cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+","+descripcion+","+pre+","+cant +");";    
+
+     var  cadena5   =  await grabacion(cadena); 
+
+
+     
+
+
+
+
+
+
+
+     
+
+    // cadena3=cadena3+cadena;
+
+     //console.log("pasamos el primer producto");
+     //console.log(cadena3);
+
+
+    
+  }
+
+   return cadena;
+
+}
 
 
 
@@ -397,9 +483,9 @@ router.post("/card", async (req, res) => {
   //const stripe = new Stripe("sk_live_sJMz90XCpVwGtMMcKTenrdQd006T69otUo");
   //sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
   const stripe = new Stripe("sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
-  console.log(req.body);
-  console.log("mointaq a pagar ")
-  console.log(req.body.amount)
+  //console.log(req.body);
+ // console.log("mointaq a pagar ")
+ // console.log(req.body.amount)
 
 
 
@@ -429,7 +515,7 @@ router.post("/card", async (req, res) => {
 
       })
   
-      console.log(charge);
+     // console.log(charge);
       var idfinal="'"+req.body.id+"'";
       var obser= "'"+req.body.nom+req.body.dire+req.body.telf+"'";
       var monto =(req.body.amount/100).toFixed(2);    
@@ -443,35 +529,18 @@ router.post("/card", async (req, res) => {
 
       //descripcion precio  quantity
 
-    var descripcion=""; 
-    var pre=0;
-    var cant=0;
-    var cadena="";
-
-     
-    for(var atr in req.body.items){
-           
-      descripcion ="'"+req.body.items[atr].descripcion+"'";
-      pre=req.body.items[atr].precio;
-      cant=req.body.items[atr].quantity;
-      cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+","+descripcion+","+pre+","+cant +");";    
-      pool.getConnection((err, conn) => {
-        conn.query(cadena, (err, customers) => {  
-            if (err) {
-                res.json(err);
-            }
     
-             res.json(customers);
-            conn.release();
-            //res.render('customers', {
-             //   data: customers
-            //});
-        });
+ 
+    //console.log(req.body.items); 
 
-      });
 
-      
-    }
+    var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele);
+  
+
+
+    //console.log("ewstamois teminando las");
+    //console.log(cadena5);
+
   
       return (
       res.status(200).json({
