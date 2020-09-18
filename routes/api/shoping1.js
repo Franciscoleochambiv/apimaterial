@@ -24,19 +24,31 @@ var pool  = mysql.createPool({
 
 
 
+var pool1  = mysql.createPool({
+  connectionLimit : 10,
+  host: 'adryan2.sytes.net',
+  user: 'pancho',
+  password: '12345678',
+  port: 3306,    
+  database: 'nodetest'
+});
 
 
-async function grabacion(cadena4){
+
+
+async function grabacion(cadena){
 
        //   console.log(cadena4);
 
 
        //var cadena5="Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1','tok_1HRcUSF6gyyMYSrKMishtZev',now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1','francocalle molsd',269.99,228.81,41.18,'franco','calle molsd','','GABIENTE MICRONICS TARTARO - FNT 8005',120,1);Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1','tok_1HRcUSF6gyyMYSrKMishtZev',now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1','francocalle molsd',269.99,228.81,41.18,'franco','calle molsd','','GAMER MACHINE CONCORDE - MIC C813',150,1);";
+
+       
       
 
 
        pool.getConnection((err, conn) => {
-         conn.query (cadena4, (err, customers) => {  
+         conn.query (cadena, (err, customers) => {  
           if (err) {
             console.log(err);
              // res.json(err);
@@ -64,6 +76,58 @@ async function grabacion(cadena4){
     
 
   }
+
+
+
+
+
+
+  async function grabacion1(cadena){
+
+    //   console.log(cadena4);
+
+
+    //var cadena5="Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1','tok_1HRcUSF6gyyMYSrKMishtZev',now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1','francocalle molsd',269.99,228.81,41.18,'franco','calle molsd','','GABIENTE MICRONICS TARTARO - FNT 8005',120,1);Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad) VALUES ('1','tok_1HRcUSF6gyyMYSrKMishtZev',now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1','francocalle molsd',269.99,228.81,41.18,'franco','calle molsd','','GAMER MACHINE CONCORDE - MIC C813',150,1);";
+   
+
+
+    pool1.getConnection((err, conn) => {
+      conn.query (cadena, (err, customers) => {  
+       if (err) {
+         console.log(err);
+          // res.json(err);
+       }
+
+       console.log(customers)
+
+       // res.json(customers);
+       conn.release();
+
+     //  console.log("se ha grando");
+       var mensaje="se hya grabado";
+
+           return mensaje;
+
+       
+      //await  conn.close();
+       //res.render('customers', {
+        //   data: customers
+       //});
+   });
+
+ });
+
+ 
+
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -539,8 +603,14 @@ router.post("/card", async (req, res) => {
 
 
     var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email);
-  
 
+    var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
+
+    var caedna5= await grabacion1(caden);
+
+    var caden1="Insert into noti(estado) value ('1')";
+  
+    var caedna6= await grabacion1(caden1);
 
     //console.log("ewstamois teminando las");
     //console.log(cadena5);
