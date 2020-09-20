@@ -550,38 +550,19 @@ router.post("/card", async (req, res) => {
   //sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
   const stripe = new Stripe("sk_test_FWzlqYz4Yk6e9KoGidPDvsN600l1PD7bYv");
   console.log(req.body);
- // console.log("mointaq a pagar ")
- // console.log(req.body.amount)
-
-
-
 
   try {
 
 
-    //stripe.charges.create
-/*
-    
-      const payment = await stripe.paymentIntents.create({
-        amount:"1000000",
-        currency: "USD",
-        description: "Delicious empanadas",
-        payment_method: "card",
-        confirm: true
-      });
-*/
       const charge = await stripe.charges.create({
         amount: req.body.amount,
         currency: 'usd',
         source: id,
         description: "Venta Exitosa",
         receipt_email: 'grupo80pr@gmail.com'
-       // customer:req.body.customer,
-       // destination:req.body.dire
 
       })
   
-     // console.log(charge);
       var idfinal="'"+req.body.id+"'";
       var obser= "'"+req.body.nom+req.body.dire+req.body.telf+"'";
       var monto =(req.body.amount/100).toFixed(2);    
@@ -594,27 +575,15 @@ router.post("/card", async (req, res) => {
       var dni ="'"+req.body.dni+"'";
       var email ="'"+req.body.email+"'";
 
+      var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email);
 
-      //descripcion precio  quantity
+      var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
 
+      var caedna5= await grabacion1(caden);
+
+      var caden1="Insert into noti(estado) value ('1')";
     
- 
-    //console.log(req.body.items); 
-
-
-    var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email);
-
-    var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
-
-    var caedna5= await grabacion1(caden);
-
-    var caden1="Insert into noti(estado) value ('1')";
-  
-    var caedna6= await grabacion1(caden1);
-
-    //console.log("ewstamois teminando las");
-    //console.log(cadena5);
-
+      var caedna6= await grabacion1(caden1);
   
       return (
       res.status(200).json({
@@ -623,8 +592,6 @@ router.post("/card", async (req, res) => {
       
       
       );
-
-
 
 
     } catch (error) {
@@ -638,6 +605,55 @@ router.post("/card", async (req, res) => {
  
 });
 
+
+router.post("/card1", async (req, res) => {
+  const { id, amount } = req.body;
+  console.log(req.body);
+
+  try {
+
+      
+      var idfinal="'"+req.body.id+"'";
+      var obser= "'"+req.body.nom+req.body.dire+req.body.telf+"'";
+      var monto =(req.body.amount/100).toFixed(2);    
+      //monto=(monto*3.5).toFixed(2);    
+      var vventa1=(monto/1.18).toFixed(2);    
+      var igv=(monto-vventa1).toFixed(2);
+      var nombre="'"+req.body.nom+"'";
+      var dire="'"+req.body.dire+"'";
+      var tele ="'"+req.body.telf+"'";
+      var dni ="'"+req.body.dni+"'";
+      var email ="'"+req.body.email+"'";
+
+      var  cadena4   =  await sumacadena(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email);
+
+      var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
+
+      var caedna5= await grabacion1(caden);
+
+      var caden1="Insert into noti(estado) value ('1')";
+    
+      var caedna6= await grabacion1(caden1);
+  
+      return (
+      res.status(200).json({
+        confirm: "EXITO"
+      })
+      
+      
+      );
+
+
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        message: error.message
+      });
+    }
+
+
+ 
+});
 
 
 
