@@ -20,7 +20,13 @@ const posts = require('./routes/api/posts');
 
 const shoping1 = require("./routes/api/shoping1");
 const categoria =require("./routes/api/categoria");
+
+
+const productos =require("./routes/api/productos");
+
+
 const { join } = require('path');
+//const Productos = require('./models/Productos');
 
 
 
@@ -152,6 +158,10 @@ app.use('/api/posts', posts);
 app.use("/api/shoping1", shoping1);
 
 app.use("/api/categoria", categoria);
+
+
+
+app.use("/api/productos", productos);
 
 // Serve static assets if in production
 
