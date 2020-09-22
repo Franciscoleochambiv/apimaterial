@@ -15,7 +15,7 @@ const Tdocumento = require("../../models/Productos");
 router.post(
   "/",
 
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
        console.log(req.body);
       
@@ -33,8 +33,7 @@ router.post(
         descripcion:req.body.descripcion,
         codigo:req.body.codigo,
         imagen:req.body.imagen,
-        popular:req.body.popular,
-        descripcion:req.body.descripcion,
+        popular:req.body.popular,        
         categoria:req.body.categoria,
         detalle:req.body.detalle,
         precio:req.body.precio,
