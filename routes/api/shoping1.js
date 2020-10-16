@@ -6,6 +6,9 @@ const User = require("../../models/User.js");
 const  Stripe= require("stripe"); 
 
 
+const nodemailer = require('nodemailer');
+
+
 const validateTipoInput = require("../../validation/shoping1.js");
 //const validateLoginInput = require("../../validation/login.js");
 
@@ -19,7 +22,7 @@ var pool  = mysql.createPool({
     user: 'pancho',
     password: '12345678',
     port: 3306,    
-    database: 'db_p2'
+    database: 'shopingweb'
 });
 
 
@@ -32,6 +35,27 @@ var pool1  = mysql.createPool({
   port: 3306,    
   database: 'nodetest'
 });
+
+
+
+var pool2  = mysql.createPool({
+  connectionLimit : 100,
+  host: 'adryan2.sytes.net',
+  user: 'pancho',
+  password: '12345678',
+  port: 3306,    
+  database: 'importacion'
+});
+
+
+
+function mathRound2 (num, decimales = 2) {
+  //Respuesta de Rubén modificada por mí para el caso general y números negativos
+  var exponente = Math.pow(10, decimales);
+  return (num >= 0 || -1) * Math.round(Math.abs(num) * exponente) / exponente;
+}
+
+
 
 
 
@@ -62,7 +86,7 @@ async function grabacion(cadena){
         //  console.log("se ha grando");
           var mensaje="se hya grabado";
 
-              return mensaje;
+              return customers;
 
           
          //await  conn.close();
@@ -155,30 +179,131 @@ async function grabacion(cadena){
      cadena= "Insert into DocVentaCabweb(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto,DVC_Nombre,DVC_Direccion,DVC_Telefono,DVC_Descripcion,DVC_Precio,DVC_Cantidad,DVC_Codigo,DVC_Dni,DVC_Email) VALUES ('1',"+idfinal+",now(),now(),'5','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+","+nombre+","+dire+","+tele+","+descripcion+","+pre+","+cant +","+codigo+","+dni+","+email +");";    
 
      var  cadena5   =  await grabacion(cadena); 
-
-
-     
-
-
-
-
-
-
-
-     
-
-    // cadena3=cadena3+cadena;
-
-     //console.log("pasamos el primer producto");
-     //console.log(cadena3);
-
-
     
   }
 
    return cadena;
 
 }
+
+
+
+
+
+async function sumacabecera(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email,idcliente,age){
+    
+  var descripcion="";
+  var pre=0;
+  var cant=0;
+  var cadena="";
+  var cadena3="";
+
+    cadena= "Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto) VALUES ('8',"+idfinal+",now(),now(),"+age+","+idcliente +",'0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+");";    
+    var  cadena5   =  await grabacion(cadena); 
+
+ for(var atr in data){
+          
+   descripcion ="'"+data[atr].descripcion+"'";
+   codigo="'"+data[atr].codigo+"'";
+
+   pre=data[atr].precio;
+   cant=data[atr].quantity;
+
+
+   //cadena= "Insert into DocVentadET(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto) VALUES ('8',"+idfinal+",now(),now(),'1','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+");";    
+    //var  cadena5   =  await grabacion(cadena); 
+
+   
+
+
+    
+   
+ }
+
+  return cadena;
+
+}
+
+
+async function sumadetalle(id,data,idfinal){
+    
+  var descripcion="";
+  var pre=0;
+  var cant=0;
+  var costo=0;
+  var saldo=0;
+  var cadena="";
+  var cadena3="";
+
+
+
+  var tdoc1='1';
+
+
+
+    //cadena= "Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto) VALUES ('8',"+idfinal+",now(),now(),'1','1','0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+");";    
+    //var  cadena5   =  await grabacion(cadena); 
+
+    console.log("estamos en la opcion de grabacion linea por linea")
+    console.log(id)
+    console.log(data)
+
+ for(var atr in data){
+
+   idpro="'"+data[atr].id+"'";       
+   descripcion ="'"+data[atr].descripcion+"'";
+   codigo="'"+data[atr].codigo+"'";
+
+
+   console.log("item x item ")
+   console.log(codigo)
+
+   pre=data[atr].precio;
+   cant=data[atr].quantity;
+
+   costo=data[atr].costo;
+
+   totalitem=(mathRound2(pre*cant)).toFixed(2);
+   
+
+
+
+
+   cadena= "Insert into DocVentadet(DVC_Id,id,ALM_Id,DVD_Cantidad,DVD_PrecioUnitario,DVD_TotalItem,DVD_Unidad) VALUES ("+id+","+idpro+",'1',"+cant+","+ pre+","+totalitem+","+ "'NIU'"+");";    
+   var  cadena5   =  await grabacion(cadena); 
+
+
+   var cadena2="Insert into kardex(codigo,cantidad,tipo,fecha,user,costou,proveedor,descuento_porcentaje,impuesto_porcentaje,serie,numero,fecha_proceso,referencia,referencia1,referencia2,tdoc,Alm_id,Empresa) values("+codigo+","+cant+","+"'STCO'"+",now()"+",'web',"+costo+","+"1,'0','0','8',"+idfinal+",'now()','1','','',"+ tdoc1+",'1','1'"+ ")";
+
+   console.log(cadena2)
+  var rcadena2= await grabacion(cadena2); 
+
+var saldocade="Update existencias set cantidad=cantidad-"+cant+" where codigo="+codigo;
+
+console.log(saldocade)
+
+var rsaldo= await grabacion(saldocade); 
+
+  // console.log(rcadena2[0])
+
+
+
+ }
+
+  return cadena;
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -288,7 +413,7 @@ router.get("/productos", (req, res) => {
 
   pool.getConnection((err, conn) => {
   //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
-    conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.precio from articulos inner join Categorias on Categorias.Categoria=articulos.grupo order by articulos.descripcion ', (err, customers) => {
+    conn.query('select articulos.id,articulos.costo,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.precio from articulos inner join Categorias on Categorias.Categoria=articulos.grupo order by articulos.descripcion ', (err, customers) => {
     
 
     //conn.query('select  * FROM tec_blog', (err, customers) => {
@@ -333,7 +458,7 @@ router.get("/producto", (req, res) => {
 
   router.get("/categorias", (req, res) => {
 
-    passport.authenticate("jwt", { session: false }),
+   // passport.authenticate("jwt", { session: false }),
     console.log(req.body);
     pool.getConnection((err, conn) => {
       conn.query('SELECT * FROM Categorias order by  descripcion', (err, customers) => {
@@ -610,7 +735,7 @@ router.post("/card", async (req, res) => {
 
 
 router.post("/card1", async (req, res) => {
-  const { id, amount } = req.body;
+  const { id,  amount } = req.body;
   console.log(req.body);
 
   try {
@@ -657,6 +782,800 @@ router.post("/card1", async (req, res) => {
 
  
 });
+
+
+
+
+
+
+
+
+router.post("/card3", async (req, res) => {
+  const { id,  amount } = req.body;
+  console.log(req.body);
+
+  try {
+
+      
+      var idfinal="'"+req.body.id+"'";
+      var idcliente="'"+req.body.idcliente+"'";
+      var obser= "'"+req.body.nom+req.body.dire+req.body.telf+"'";
+      var monto =(req.body.amount/100).toFixed(2);    
+      //monto=(monto*3.5).toFixed(2);    
+      var vventa1=(monto/1.18).toFixed(2);    
+      var igv=(monto-vventa1).toFixed(2);
+      var nombre="'"+req.body.nom+"'";
+      var dire="'"+req.body.dire+"'";
+      var tele ="'"+req.body.telf+"'";
+      var dni ="'"+req.body.dni+"'";
+      var email ="'"+req.body.email+"'";
+
+      var age ="'"+req.body.age+"'";
+
+      var  cadena4   =  await sumacabecera(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email,idcliente,age);
+
+      var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
+
+      var caedna5= await grabacion1(caden);
+
+      var caden1="Insert into noti(estado) value ('1')";
+    
+      var caedna6= await grabacion1(caden1);
+
+    //await esunat(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email)
+  
+      return (
+      res.status(200).json({
+        confirm: "EXITO"
+      })
+      
+      
+      );
+
+
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        message: error.message
+      });
+    }
+
+
+ 
+});
+
+
+
+
+router.get("/numero/:id", (req, res) => {
+
+  //passport.authenticate("jwt", { session: false }),
+
+  let codigo=req.params.id;
+
+
+
+
+
+  console.log(req.body);
+
+  pool.getConnection((err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+    conn.query("SELECT CR_Numero as Numero from CorrelativoDocumento WHERE TD_ID="+ codigo+" and CR_Serie='8' and Alm_Id='1' and Empresa='1'  ", (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+
+        res.json(customers);
+        conn.release();
+        //res.render('customers', {
+         //   data: customers
+        //});
+    });
+});  
+});
+
+
+router.post("/idventa", async (req, res) => {
+  const { id} = req.body;
+  //let id=req.params.id;
+
+  var idfinal="'"+req.body.id+"'";
+  var age="'"+req.body.age+"'";
+  
+ // passport.authenticate("jwt", { session: false }),
+
+
+  console.log("esto es lo que sta llegando de datos")
+  console.log(req.body);
+
+  try {
+
+  //var cadet ='SELECT DVC_ID from DocVentaCab where TD_ID="1" and DVC_Serie="8" and DVC_Numero='+id+ ' and Alm_Id="1" AND Empresa="1" limit 1 ';
+  //var cadena5= await grabacion(cadet);
+  
+  console.log("terminamos de hace rla consulta")
+  //console.log(cadena5);
+
+
+   pool.getConnection( (err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+    conn.query('SELECT DVC_ID from DocVentaCab where TD_ID='+age+ ' and DVC_Serie="8" and DVC_Numero='+idfinal+ ' and Alm_Id="1" AND Empresa="1" limit 1 ', async  (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+       // console.log(customer);
+
+       console.log("asdasdasdasdasdasdsa")
+       console.log(customers[0].DVC_ID)
+
+       console.log(req.body.items)
+
+       let IDdetalle=customers[0].DVC_ID;
+
+       var  cadena4   =  await sumadetalle(IDdetalle,req.body.items,idfinal);
+         res.json(customers);
+        conn.release();
+
+    });
+});  
+
+
+
+  }
+  catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: error.message
+    });
+  }
+  
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.post("/idaumenta", (req, res) => {
+  const { id} = req.body;
+  var age="'"+req.body.age+"'";
+
+  pool.getConnection((err, conn) => {
+    //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+      conn.query('update CorrelativoDocumento set CR_Numero='+id+ ' where TD_ID='+age+'  and CR_Serie="8"  and Alm_Id="1" AND Empresa="1"  ', (err, customers) => {
+      
+  
+      //conn.query('select  * FROM tec_blog', (err, customers) => {
+          if (err) {
+              res.json(err);
+          }
+  
+          res.json(customers);
+          conn.release();
+          //res.render('customers', {
+           //   data: customers
+          //});
+      });
+  });  
+
+});
+
+
+router.post("/detalle", async (req, res) => {
+  const { id,data} = req.body;
+  //id
+  //items
+
+
+ // passport.authenticate("jwt", { session: false }),  
+
+
+
+  console.log("llefo este valos al apit ")
+  console.log(req.body);
+
+  try {
+  //  var  cadena4   =  await sumadetalle(req.body.id,req.body.items);
+    return (
+      res.status(200).json({
+        confirm: "EXITO"
+      })
+      
+      
+      );
+
+
+  }
+
+  catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: error.message
+    });
+  }
+
+});
+
+
+
+//SELECT * FROM sunat inner join  ubigeo on sunat.c5=ubigeo.ubigeo
+
+
+
+
+router.get("/sunat/:id", (req, res) => {
+
+  let codigo=req.params.id;
+
+  //passport.authenticate("jwt", { session: false }),
+
+
+
+  console.log(req.body);
+  
+
+  pool2.getConnection((err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+
+//SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento inner join ubprovincia on ubprovincia.idDepa=ubigeo.provincia where ubprovincia.idDepa=ubigeo.departamento and   c1=10309611131 
+
+    conn.query("SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento where c1="+codigo, (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+
+        res.json(customers);
+        conn.release();
+        //res.render('customers', {
+         //   data: customers
+        //});
+    });
+});  
+});
+
+
+
+router.get("/cliente/:id", (req, res) => {
+
+  let codigo=req.params.id;
+
+  //passport.authenticate("jwt", { session: false }),
+
+
+
+  console.log(req.body);
+  
+
+  pool.getConnection((err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+
+//SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento inner join ubprovincia on ubprovincia.idDepa=ubigeo.provincia where ubprovincia.idDepa=ubigeo.departamento and   c1=10309611131 
+
+    conn.query("SELECT * FROM cpvarios WHERE PVCL_NroDocIdentidad ="+codigo, (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+
+        res.json(customers);
+        conn.release();
+        //res.render('customers', {
+         //   data: customers
+        //});
+    });
+});  
+});
+
+
+
+
+
+
+
+router.get("/codcli", (req, res) => {
+
+  //passport.authenticate("jwt", { session: false }),
+
+
+  console.log(req.body);
+
+  pool.getConnection((err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+    conn.query("SELECT MAX(PVCL_Id) AS id FROM cpvarios ", (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+
+        res.json(customers);
+        conn.release();
+        //res.render('customers', {
+         //   data: customers
+        //});
+    });
+});  
+});
+
+
+
+
+
+router.post("/codcli", async (req, res) => {
+  const { id} = req.body;
+  //let id=req.params.id;
+
+  var idfinal="'"+req.body.id+"'";
+  
+ // passport.authenticate("jwt", { session: false }),
+
+ var nombre="'"+req.body.nom+"'";
+      var dire="'"+req.body.dire+"'";
+      var tele ="'"+req.body.telf+"'";
+      var dni ="'"+req.body.dni+"'";
+      var email ="'"+req.body.email+"'";
+
+
+
+  console.log("esto es lo que sta llegando de datos")
+  console.log(req.body);
+
+  try {
+
+  //var cadet ='SELECT DVC_ID from DocVentaCab where TD_ID="1" and DVC_Serie="8" and DVC_Numero='+id+ ' and Alm_Id="1" AND Empresa="1" limit 1 ';
+  //var cadena5= await grabacion(cadet);
+  
+  console.log("terminamos de hace rla consulta")
+  //console.log(cadena5);
+
+
+   pool.getConnection( (err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+    
+    
+    conn.query('SELECT MAX(PVCL_Id) AS id FROM cpvarios', async  (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+       // console.log(customer);
+
+       console.log("asdasdasdasdasdasdsa")
+       console.log(customers[0].id)
+
+       //console.log(req.body.items)
+
+       let IDdetalle=parseInt(customers[0].id)+1;
+
+       var cadena="Insert into cpvarios(PVCL_ID,PVCL_Tipo,PVCL_RazonSocial,PVCL_Titular,PVCL_Direccion,PVCL_Direccion2,PVCL_Direccion3,DI_Id,PVCL_NroDocIdentidad,PVCL_Telefono,PVCL_Email,PVCL_FecIngreso,PVCL_Inactivo) Values ("+IDdetalle+",'C',"+nombre+","+nombre+","+dire+","+dire+","+dire+","+"1"+","+dni+","+tele+","+email+",now(),'1'"+")";
+
+
+       var  cadena4   =  await grabacion(cadena);
+       console.log("teminams de grabar ")
+         console.log(customers)
+         res.json(customers);
+        conn.release();
+
+    });
+});  
+
+
+
+  }
+  catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: error.message
+    });
+  }
+  
+
+
+});
+
+
+
+
+
+
+
+
+
+
+router.post("/correo", (req, res) => {
+
+  //passport.authenticate("jwt", { session: false }),
+
+  var ema='"'+req.body.email+'"';
+  var xml='"'+req.body.xml+'"';
+  var cdr='"'+req.body.cdr+'"';
+  var pdf='"'+req.body.pdf+'"';
+  var title=req.body.archivot;
+
+  var tipo=req.body.tipo;
+
+
+
+  //console.log(xml)
+  console.log("valor del cdr7777")
+
+  console.log(tipo)
+  if (tipo=="05"){
+    cdr='iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD/' +
+    '//+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+G/58ZDrAz3D/McH8yw83NDDeNGe4U' +
+    'g9C9zwz3gVLMDA/A6P9/AFGGFyjOXZtQAAAAAElFTkSuQmCC';
+  }
+  if (tipo=="03"){
+    cdr='iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD/' +
+    '//+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+G/58ZDrAz3D/McH8yw83NDDeNGe4U' +
+    'g9C9zwz3gVLMDA/A6P9/AFGGFyjOXZtQAAAAAElFTkSuQmCC';
+  }
+
+
+  var razonemisor=req.body.razonemisor;
+  var clienteruc=req.body.clienteruc;
+  var clientename=req.body.clientename;
+  //1@gmail.com
+
+  if  (ema.length>5){
+
+try{
+
+  console.log(req.body);
+  // Generate SMTP service account from ethereal.email
+nodemailer.createTestAccount((err, account) => {
+  if (err) {
+      console.error('Failed to create a testing account');
+      console.error(err);
+      return process.exit(1);
+  }
+
+  console.log('Credentials obtained, sending message...');
+
+  // NB! Store the account object values somewhere if you want
+  // to re-use the same account for future mail deliveries
+
+  // Create a SMTP transporter object
+  let transporter = nodemailer.createTransport(
+      {
+          host: "smtp.gmail.com",
+          port: 25,
+          //secure: account.smtp.secure,
+          auth: {
+              user: "grupo90pr@gmail.com",
+              pass: "sopadecaracol1"
+          },
+          logger: true,
+          debug: false // include SMTP traffic in the logs
+      },
+      {
+          // default message fields
+
+          // sender info
+          from: 'grupo90pr@gmail.com',
+          headers: {
+              'X-Laziness-level': 1000 // just an example header, no need to use this
+          }
+      }
+  );
+
+  // Message object
+  let message;
+
+  if (tipo=="01"){
+
+     message = {
+      // Comma separated list of recipients
+      //to: 'grupo23pe@yahoo.com',
+      to: ema,
+
+      // Subject of the message
+      subject: " Envio Automatico de Comprobantes de: "+razonemisor+  Date.now(),
+
+      // plaintext body
+      text: 'Hello to myself!',
+
+      // HTML body
+      html: `<p><b>Hola</b> `+clientename +`<img src="http://adryan2.sytes.net/shopingweb/ima/pancho.jpg"/></p>
+      <p>Tiene Algunos Comprobantes Adjuntos:<br/><img src="cid:nyan@example.com"/></p>`,
+
+      // AMP4EMAIL
+      amp: `<!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style amp4email-boilerplate>body{visibility:hidden}</style>
+          <script async src="https://cdn.ampproject.org/v0.js"></script>
+          <script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
+        </head>
+        <body>
+          <p><b>Hello</b> to myself <amp-img src="https://cldup.com/P0b1bUmEet.png" width="16" height="16"/></p>
+          <p>No embedded image attachments in AMP, so here's a linked nyan cat instead:<br/>
+            <amp-anim src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
+        </body>
+      </html>`,
+
+      // An array of attachments      
+      attachments: [
+          // String attachment
+
+          /*
+          {
+              filename: 'notes.txt',
+              content: 'Some notes about this e-mail',
+              contentType: 'text/plain' // optional, would be detected from the filename
+          },
+
+          // Binary Buffer attachment
+          {
+              filename: 'image.png',
+              content: Buffer.from(
+                  'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD/' +
+                      '//+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+G/58ZDrAz3D/McH8yw83NDDeNGe4U' +
+                      'g9C9zwz3gVLMDA/A6P9/AFGGFyjOXZtQAAAAAElFTkSuQmCC',
+                  'base64'
+              ),
+
+              //cid: 'note@example.com' // should be as unique as possible
+              cid: ema // should be as unique as possible
+          },
+
+
+          */
+
+          // Binary Buffer attachment
+          {
+            filename: title+'.pdf',
+            content: Buffer.from(pdf, 'base64' ),
+
+            //cid: 'note@example.com' // should be as unique as possible
+            cid: ema // should be as unique as possible
+          },
+
+          // Binary Buffer attachment
+          {
+            filename: title+'.zip',
+            content: Buffer.from(xml, 'base64' ),
+
+            //cid: 'note@example.com' // should be as unique as possible
+            cid: ema // should be as unique as possible
+          },
+          {
+            filename: 'R-'+title+'.zip',
+            content: Buffer.from(cdr, 'base64' ),
+
+            //cid: 'note@example.com' // should be as unique as possible
+            cid: ema // should be as unique as possible
+          },
+
+
+
+
+          // File Stream attachment
+          {
+              filename: 'nyan cat ✔.gif',
+              path: __dirname + '/assets/nyan.gif',
+              cid: ema // should be as unique as possible
+          }
+      ],
+
+      list: {
+          // List-Help: <mailto:admin@example.com?subject=help>
+          help: 'admin@example.com?subject=help',
+
+          // List-Unsubscribe: <http://example.com> (Comment)
+          unsubscribe: [
+              {
+                  url: 'http://example.com/unsubscribe',
+                  comment: 'A short note about this url'
+              },
+              'unsubscribe@example.com'
+          ],
+
+          // List-ID: "comment" <example.com>
+          id: {
+              url: 'mylist.example.com',
+              comment: 'This is my awesome list'
+          }
+      }
+  };
+
+
+
+   }
+
+  else {  
+
+   message = {
+      // Comma separated list of recipients
+      //to: 'grupo23pe@yahoo.com',
+      to: ema,
+
+      // Subject of the message
+      subject: " Envio Automatico de Comprobantes de: "+razonemisor+  Date.now(),
+
+      // plaintext body
+      text: 'Hello to myself!',
+
+      // HTML body
+      html: `<p><b>Hola</b> `+clientename +`<img src="http://adryan2.sytes.net/shopingweb/ima/pancho.jpg"/></p>
+      <p>Tiene Algunos Comprobantes Adjuntos:<br/><img src="cid:nyan@example.com"/></p>`,
+
+      // AMP4EMAIL
+      amp: `<!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style amp4email-boilerplate>body{visibility:hidden}</style>
+          <script async src="https://cdn.ampproject.org/v0.js"></script>
+          <script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
+        </head>
+        <body>
+          <p><b>Hello</b> to myself <amp-img src="https://cldup.com/P0b1bUmEet.png" width="16" height="16"/></p>
+          <p>No embedded image attachments in AMP, so here's a linked nyan cat instead:<br/>
+            <amp-anim src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
+        </body>
+      </html>`,
+
+      // An array of attachments      
+      attachments: [
+          // String attachment
+
+          /*
+          {
+              filename: 'notes.txt',
+              content: 'Some notes about this e-mail',
+              contentType: 'text/plain' // optional, would be detected from the filename
+          },
+
+          // Binary Buffer attachment
+          {
+              filename: 'image.png',
+              content: Buffer.from(
+                  'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD/' +
+                      '//+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+G/58ZDrAz3D/McH8yw83NDDeNGe4U' +
+                      'g9C9zwz3gVLMDA/A6P9/AFGGFyjOXZtQAAAAAElFTkSuQmCC',
+                  'base64'
+              ),
+
+              //cid: 'note@example.com' // should be as unique as possible
+              cid: ema // should be as unique as possible
+          },
+
+
+          */
+
+          // Binary Buffer attachment
+          {
+            filename: title+'.pdf',
+            content: Buffer.from(pdf, 'base64' ),
+
+            //cid: 'note@example.com' // should be as unique as possible
+            cid: ema // should be as unique as possible
+          },
+
+          // Binary Buffer attachment
+          {
+            filename: title+'.zip',
+            content: Buffer.from(xml, 'base64' ),
+
+            //cid: 'note@example.com' // should be as unique as possible
+            cid: ema // should be as unique as possible
+          },
+         
+
+
+
+          // File Stream attachment
+          {
+              filename: 'nyan cat ✔.gif',
+              path: __dirname + '/assets/nyan.gif',
+              cid: ema // should be as unique as possible
+          }
+      ],
+
+      list: {
+          // List-Help: <mailto:admin@example.com?subject=help>
+          help: 'admin@example.com?subject=help',
+
+          // List-Unsubscribe: <http://example.com> (Comment)
+          unsubscribe: [
+              {
+                  url: 'http://example.com/unsubscribe',
+                  comment: 'A short note about this url'
+              },
+              'unsubscribe@example.com'
+          ],
+
+          // List-ID: "comment" <example.com>
+          id: {
+              url: 'mylist.example.com',
+              comment: 'This is my awesome list'
+          }
+      }
+  };
+}
+
+
+
+
+
+
+
+
+
+  transporter.sendMail(message, (error, info) => {
+      if (error) {
+          console.log('Error occurred');
+          console.log(error.message);
+         //  return process.exit(1);
+      }
+
+      console.log('Message sent successfully!');
+      console.log(nodemailer.getTestMessageUrl(info));
+
+      // only needed when using pooled connections
+      transporter.close();
+  });
+});
+
+
+return (
+  res.status(200).json({
+    confirm: "EXITO"
+  })
+)
+
+}
+
+catch (error) {
+  console.log(error);
+  return res.status(400).json({
+    message: error.message
+  });
+}
+
+}
+  
+});
+
+
+
+
+
+
 
 
 
