@@ -8,6 +8,9 @@ const path = require('path');
 const morgan =  require("morgan");
 
 
+const https = require("https");
+
+
 const mysql = require('mysql');
 
 const myConnection = require('express-myconnection');
@@ -19,11 +22,22 @@ const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 
 const shoping1 = require("./routes/api/shoping1");
-const categoria =require("./routes/api/categoria");
 
+const categoria =require("./routes/api/categoria");
+const tipo =require("./routes/api/tipo");
+
+const serie =require("./routes/api/serie");
+
+const umedida =require("./routes/api/umedida");
+const linea =require("./routes/api/linea");
+const almacen =require("./routes/api/almacen");
+const clientes =require("./routes/api/clientes");
+const articulos =require("./routes/api/articulos");
 
 const productos =require("./routes/api/productos");
 
+
+const upload =require("./routes/api/upload");
 
 const { join } = require('path');
 //const Productos = require('./models/Productos');
@@ -88,10 +102,12 @@ mongoose.connect(db)
 
 const URI = process.env.MONGOOSE_URI
     ? process.env.MONGOOSE_URI
-    : "mongodb+srv://sopadecaracol1:sopadecaracol1@cluster0.twipn.mongodb.net/";
+//    : "mongodb+srv://sopadecaracol1:sopadecaracol1@cluster0.twipn.mongodb.net/";
+//     : "mongodb://164.90.141.25/";
+      : "mongodb+srv://sopadecaracol1:sopadecaracol1@cluster0.cnmg4.mongodb.net/";
 
   mongoose.connect(URI, {
-    dbName:'mama',
+    dbName:'ventapos',
     useNewUrlParser: true,
     useFindAndModify :false,
     useCreateIndex: true,
@@ -158,8 +174,20 @@ app.use('/api/posts', posts);
 app.use("/api/shoping1", shoping1);
 
 app.use("/api/categoria", categoria);
+app.use("/api/tipo", tipo);
+
+app.use("/api/serie", serie);
 
 
+app.use("/api/umedida", umedida);
+app.use("/api/linea", linea);
+app.use("/api/almacen", almacen);
+
+app.use("/api/clientes", clientes);
+app.use("/api/articulos", articulos);
+
+
+app.use("/api/upload", upload);
 
 app.use("/api/productos", productos);
 
@@ -171,20 +199,24 @@ app.use("/api/productos", productos);
 
 ///confioracion  para el https 
 
-/*
+
 const httpsOptions = {
-   cert:fs.readFileSync(path.join(__dirname,'ctr','cert1.pem')),
-   key:fs.readFileSync(path.join(__dirname,'ctr','privkey1.pem'))
+   cert:fs.readFileSync(path.join(__dirname,'ctr','cert2.pem')),
+   key:fs.readFileSync(path.join(__dirname,'ctr','privkey2.pem'))
 }
 
-const port = 5000;
+const port = process.env.PORT || 7001;
+
+/*
 
 https.createServer(httpsOptions,app)
   .listen(port,function(){
    console.log(`Server running on port https ${port}`)      
       })
 
- */     
+      
+
+
 
 
 
@@ -192,9 +224,8 @@ const port = process.env.PORT || 3001;
 
 
 
-
+*/
 app.listen(port, () => console.log(`Server running on port ${port}`));
-
 
 
 

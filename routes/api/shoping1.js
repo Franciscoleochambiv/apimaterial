@@ -18,8 +18,8 @@ const mysql = require('mysql');
 
 var pool  = mysql.createPool({
     connectionLimit : 100,
-    host: 'adryan2.sytes.net',
-    user: 'pancho',
+    host: 'adryan3.sytes.net',
+    user: 'pancho1',
     password: '12345678',
     port: 3306,    
     database: 'shopingweb'
@@ -190,7 +190,7 @@ async function grabacion(cadena){
 
 
 
-async function sumacabecera(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email,idcliente,age){
+async function sumacabecera(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email,idcliente,age,serie){
     
   var descripcion="";
   var pre=0;
@@ -198,7 +198,7 @@ async function sumacabecera(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tel
   var cadena="";
   var cadena3="";
 
-    cadena= "Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto) VALUES ('8',"+idfinal+",now(),now(),"+age+","+idcliente +",'0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+");";    
+    cadena= "Insert into DocVentaCab(DVC_Serie,DVC_Numero,DVC_Fecha,DVC_FechaIng,TD_ID,PVCL_ID,DVC_Pagado,DVC_FormaPago,DVC_Vendedor,DVC_Anulado,DVC_Guia,Alm_Id,Empresa,DVC_NC,serien,DVC_Saldo,Pendiente,DVC_Observaciones,DVC_Total,DVC_Subtotal,DVC_Impuesto) VALUES ("+serie+","+idfinal+",now(),now(),"+age+","+idcliente +",'0','CONTADO','web','0','0','1','1','0','0','0','1',"+obser+","+monto+","+vventa1+","+igv+");";    
     var  cadena5   =  await grabacion(cadena); 
 
  for(var atr in data){
@@ -225,7 +225,7 @@ async function sumacabecera(data,idfinal,obser,monto,vventa1,igv,nombre,dire,tel
 }
 
 
-async function sumadetalle(id,data,idfinal){
+async function sumadetalle(id,data,idfinal,serie){
     
   var descripcion="";
   var pre=0;
@@ -269,11 +269,11 @@ async function sumadetalle(id,data,idfinal){
 
 
 
-   cadena= "Insert into DocVentadet(DVC_Id,id,ALM_Id,DVD_Cantidad,DVD_PrecioUnitario,DVD_TotalItem,DVD_Unidad) VALUES ("+id+","+idpro+",'1',"+cant+","+ pre+","+totalitem+","+ "'NIU'"+");";    
+   cadena= "Insert into DocVentadet(DVC_Id,id,ALM_Id,DVD_Cantidad,DVD_PrecioUnitario,DVD_TotalItem,DVD_Unidad,DVD_ValorVenta,DVD_Descuento,DVD_Item,DVD_U) VALUES ("+id+","+idpro+",'1',"+cant+","+ pre+","+totalitem+","+ "'NIU'"+",0,0,0,'0'"+ ");";    
    var  cadena5   =  await grabacion(cadena); 
 
 
-   var cadena2="Insert into kardex(codigo,cantidad,tipo,fecha,user,costou,proveedor,descuento_porcentaje,impuesto_porcentaje,serie,numero,fecha_proceso,referencia,referencia1,referencia2,tdoc,Alm_id,Empresa) values("+codigo+","+cant+","+"'STCO'"+",now()"+",'web',"+costo+","+"1,'0','0','8',"+idfinal+",'now()','1','','',"+ tdoc1+",'1','1'"+ ")";
+   var cadena2="Insert into kardex(codigo,cantidad,tipo,fecha,user,costou,proveedor,descuento_porcentaje,impuesto_porcentaje,serie,numero,fecha_proceso,referencia,referencia1,referencia2,tdoc,Alm_id,Empresa,Alm_Des) values("+codigo+","+cant+","+"'STCO'"+",now()"+",'web',"+costo+","+"1,'0','0',"+serie+","+idfinal+",now(),'1','','',"+ tdoc1+",'1','1'"+",'1'"+ ")";
 
    console.log(cadena2)
   var rcadena2= await grabacion(cadena2); 
@@ -413,7 +413,7 @@ router.get("/productos", (req, res) => {
 
   pool.getConnection((err, conn) => {
   //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
-    conn.query('select articulos.id,articulos.costo,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.precio from articulos inner join Categorias on Categorias.Categoria=articulos.grupo order by articulos.descripcion ', (err, customers) => {
+    conn.query('select articulos.id,articulos.costo,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,articulos.detalle,Categorias.descripcion as categoria,articulos.precio from articulos inner join Categorias on Categorias.Categoria=articulos.grupo order by articulos.descripcion ', (err, customers) => {
     
 
     //conn.query('select  * FROM tec_blog', (err, customers) => {
@@ -711,7 +711,7 @@ router.post("/card", async (req, res) => {
 
       var caden1="Insert into noti(estado) value ('1')";
     
-      var caedna6= await grabacion1(caden1);
+     var caedna6= await grabacion1(caden1);
   
       return (
       res.status(200).json({
@@ -809,18 +809,19 @@ router.post("/card3", async (req, res) => {
       var tele ="'"+req.body.telf+"'";
       var dni ="'"+req.body.dni+"'";
       var email ="'"+req.body.email+"'";
+      var serie ="'"+req.body.serie+"'";
 
       var age ="'"+req.body.age+"'";
 
-      var  cadena4   =  await sumacabecera(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email,idcliente,age);
+      var  cadena4   =  await sumacabecera(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email,idcliente,age,serie);
 
-      var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
+    //  var caden="Insert into message(name,message) value ('web'"+","+nombre+")";
 
-      var caedna5= await grabacion1(caden);
+    //  var caedna5= await grabacion1(caden);
 
-      var caden1="Insert into noti(estado) value ('1')";
+     // var caden1="Insert into noti(estado) value ('1')";
     
-      var caedna6= await grabacion1(caden1);
+     // var caedna6= await grabacion1(caden1);
 
     //await esunat(req.body.items,idfinal,obser,monto,vventa1,igv,nombre,dire,tele,dni,email)
   
@@ -847,32 +848,41 @@ router.post("/card3", async (req, res) => {
 
 
 
-router.get("/numero/:id", (req, res) => {
+router.get("/numero/", (req, res) => {
 
   //passport.authenticate("jwt", { session: false }),
 
-  let codigo=req.params.id;
+  //console.log(req);
+//  console.log(req.query)
+  
+
+  let codigo=req.query.id;
+  //console.log(codigo)
+  let serie ="'"+req.query.serie+"'";
+  //console.log(serie)
+
+ let cadena="SELECT CR_Numero as Numero from CorrelativoDocumento WHERE TD_ID="+ codigo+" and CR_Serie="+serie+" and Alm_Id='1' and Empresa='1'"
+ console.log(cadena)
 
 
 
-
-
-  console.log(req.body);
+  
 
   pool.getConnection((err, conn) => {
   //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
-    conn.query("SELECT CR_Numero as Numero from CorrelativoDocumento WHERE TD_ID="+ codigo+" and CR_Serie='8' and Alm_Id='1' and Empresa='1'  ", (err, customers) => {
+    conn.query(cadena, (err, customers) => {
     
 
     //conn.query('select  * FROM tec_blog', (err, customers) => {
         if (err) {
             res.json(err);
         }
-
+       
+         console.log(customers)
         res.json(customers);
         conn.release();
         //res.render('customers', {
-         //   data: customers
+           //   data: customers
         //});
     });
 });  
@@ -885,6 +895,7 @@ router.post("/idventa", async (req, res) => {
 
   var idfinal="'"+req.body.id+"'";
   var age="'"+req.body.age+"'";
+  var serie="'"+req.body.serie+"'";
   
  // passport.authenticate("jwt", { session: false }),
 
@@ -903,7 +914,7 @@ router.post("/idventa", async (req, res) => {
 
    pool.getConnection( (err, conn) => {
   //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
-    conn.query('SELECT DVC_ID from DocVentaCab where TD_ID='+age+ ' and DVC_Serie="8" and DVC_Numero='+idfinal+ ' and Alm_Id="1" AND Empresa="1" limit 1 ', async  (err, customers) => {
+    conn.query('SELECT DVC_ID from DocVentaCab where TD_ID='+age+ ' and DVC_Serie='+serie+' and DVC_Numero='+idfinal+ ' and Alm_Id="1" AND Empresa="1" limit 1 ', async  (err, customers) => {
     
 
     //conn.query('select  * FROM tec_blog', (err, customers) => {
@@ -919,7 +930,7 @@ router.post("/idventa", async (req, res) => {
 
        let IDdetalle=customers[0].DVC_ID;
 
-       var  cadena4   =  await sumadetalle(IDdetalle,req.body.items,idfinal);
+       var  cadena4   =  await sumadetalle(IDdetalle,req.body.items,idfinal,serie);
          res.json(customers);
         conn.release();
 
@@ -963,10 +974,14 @@ router.post("/idventa", async (req, res) => {
 router.post("/idaumenta", (req, res) => {
   const { id} = req.body;
   var age="'"+req.body.age+"'";
+  let serie="'"+req.body.serie+"'";
+  let cadena='update CorrelativoDocumento set CR_Numero='+id+ ' where TD_ID='+age+'  and CR_Serie='+serie+' and Alm_Id="1" AND Empresa="1"  ';
+
+  console.log(cadena)
 
   pool.getConnection((err, conn) => {
     //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
-      conn.query('update CorrelativoDocumento set CR_Numero='+id+ ' where TD_ID='+age+'  and CR_Serie="8"  and Alm_Id="1" AND Empresa="1"  ', (err, customers) => {
+      conn.query(cadena, (err, customers) => {
       
   
       //conn.query('select  * FROM tec_blog', (err, customers) => {
@@ -1027,7 +1042,7 @@ router.post("/detalle", async (req, res) => {
 
 
 
-router.get("/sunat/:id", (req, res) => {
+router.get("/sunat/:id",  (req, res) => {
 
   let codigo=req.params.id;
 
@@ -1043,7 +1058,60 @@ router.get("/sunat/:id", (req, res) => {
 
 //SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento inner join ubprovincia on ubprovincia.idDepa=ubigeo.provincia where ubprovincia.idDepa=ubigeo.departamento and   c1=10309611131 
 
-    conn.query("SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento where c1="+codigo, (err, customers) => {
+  conn.query("SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento where c1="+codigo, (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+        console.log(customers)
+
+        res.json(customers);
+        conn.release();
+        //res.render('customers', {
+         //   data: customers
+        //});
+    });
+});  
+});
+
+
+
+
+router.get("/ventaserie/:id", (req, res) => {
+
+
+let serie=req.params.id;
+let Empresa="1";
+let caja1="1";
+//let series11="8"
+
+
+let cadena="";
+   if (serie==0){
+     cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%Y-%m-%d') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
+
+   }
+   else{
+    cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%Y-%m-%d') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +" and cab.DVC_Serie="+serie+"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
+     
+   }
+
+
+
+ 
+
+console.log(cadena)
+//and DATE_FORMAT(cab.DVC_Fecha,'%Y-%m-%d')>='$fi'  and DATE_FORMAT(cab.DVC_Fecha,'%Y-%m-%d')<='$ff'
+
+
+pool.getConnection((err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+
+//SELECT * FROM sunat inner join ubigeo on sunat.c5=ubigeo.ubigeo inner join ubdepartamento on ubdepartamento.idDepa=ubigeo.departamento inner join ubprovincia on ubprovincia.idDepa=ubigeo.provincia where ubprovincia.idDepa=ubigeo.departamento and   c1=10309611131 
+
+    conn.query(cadena, (err, customers) => {
     
 
     //conn.query('select  * FROM tec_blog', (err, customers) => {
@@ -1059,6 +1127,8 @@ router.get("/sunat/:id", (req, res) => {
     });
 });  
 });
+
+
 
 
 

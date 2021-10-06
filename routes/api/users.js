@@ -44,6 +44,7 @@ router.post('/register', (req, res) => {
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
+          serie: req.body.serie,
           avatar,
           password: req.body.password, 
         });
@@ -87,7 +88,7 @@ router.post('/login', async (req, res) => {
     if(isMatch) {
       // User Matched
       // Create JWT Payload
-      const payload = { id: user.id, name: user.name, avatar: user.avatar };
+      const payload = { id: user.id, name: user.name, avatar: user.avatar, serie: user.serie };
       
       // Sign Token
       jwt.sign(
@@ -121,6 +122,7 @@ router.get(
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
+      serie: req.user.serie,
     });
   }
 );
