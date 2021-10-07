@@ -14,7 +14,7 @@ var pool  = mysql.createPool({
     user: 'pancho1',
     password: '12345678',
     port: 3306,    
-    database: 'shopingweb'
+    database: 'chaquilla'
 });
 
 
