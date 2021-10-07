@@ -11,6 +11,7 @@
 
 # npmjs
 /dist
+/ctr
 
 # misc
 .DS_Store
