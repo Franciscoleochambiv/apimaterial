@@ -1090,11 +1090,11 @@ let caja1="1";
 
 let cadena="";
    if (serie==0){
-     cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%Y-%m-%d') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
+     cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%d/%m/%Y') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
 
    }
    else{
-    cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%Y-%m-%d') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +" and cab.DVC_Serie="+serie+"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
+    cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%d/%m/%Y') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +" and cab.DVC_Serie="+serie+"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
      
    }
 
