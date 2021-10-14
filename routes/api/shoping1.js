@@ -889,6 +889,76 @@ router.get("/numero/", (req, res) => {
 });
 
 
+
+router.get("/resbolanu/", (req, res) => {  
+ let cadena="Select numerores As id,DATE_FORMAT(now(),'%Y-%m-%d') as fech from Resu_Bolanu order by numerores Desc limit 1 ";
+ console.log(cadena)  
+  pool.getConnection((err, conn) => {
+  //conn.query('select articulos.id,articulos.codigo,articulos.imagen, true as popular,articulos.descripcion,Categorias.descripcion as categoria,articulos.detalle,articulos.precio,existencias.cantidad,existencias.cantidad2,existencias.cantidad3,existencias.cantidad4 from articulos inner join Categorias on Categorias.Categoria=articulos.grupo inner join existencias on existencias.codigo=articulos.codigo order by articulos.descripcion', (err, customers) => {
+    conn.query(cadena, (err, customers) => {
+    
+
+    //conn.query('select  * FROM tec_blog', (err, customers) => {
+        if (err) {
+            res.json(err);
+        }
+       
+         console.log(customers)
+        res.json(customers);
+        conn.release();
+        //res.render('customers', {
+           //   data: customers
+        //});
+    });
+});  
+});
+
+
+router.post("/resbolaumenta/", async (req, res) => { 
+  
+  console.log(req.body)
+
+
+   var numerores="'"+req.body.numerores+"'";                                 
+   var fecha_Documento="'"+req.body.fecha_Documento+"'";
+   var fecha_Emision="'"+req.body.fecha_Emision+"'";
+   var Nro_Procesos="'"+req.body.Nro_Procesos+"'";
+   var respuesta="'"+req.body.respuesta+"'";
+   var estado="'"+req.body.estado+"'";
+   var archivo="'"+req.body.archivo+"'";
+   var dvcid="'"+req.body.dvcid+"'";
+ 
+  let cadena="Insert into Resu_Bolanu(numerores,Fecha_Emision,Fecha_Documento,Nro_Procesos,respuesta,estado,archivo) values ("+numerores+","+fecha_Emision+","+fecha_Documento+","+Nro_Procesos+","+respuesta+","+estado+","+archivo+")";
+//  */*/Select numerores As id,DATE_FORMAT(now(),'%Y-%m-%d') as fech from Resu_Bolanu order by numerores Desc limit 1 ";
+  console.log(cadena)
+
+  let cade1 = "Update DocVentaCab  set DVC_Anulado=1 where DVC_ID="+dvcid;
+
+try  {
+  var cadena4= await grabacion(cadena);
+  var cadena5= await grabacion(cade1);
+    return (
+      res.status(200).json({
+      confirm: "EXITO"
+     })
+    )
+  } 
+  
+  catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: error.message
+    });
+  }
+
+
+ });
+ 
+
+
+
+
+
 router.post("/idventa", async (req, res) => {
   const { id} = req.body;
   //let id=req.params.id;
@@ -1089,13 +1159,16 @@ let caja1="1";
 
 
 let cadena="";
-   if (serie==0){
+   if (serie===0){
      cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%d/%m/%Y') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
 
    }
    else{
     cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%d/%m/%Y') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +" and cab.DVC_Serie="+serie+"  and Empresa="+Empresa+ "  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
      
+   }
+   if (serie===undefined){
+    cadena="select cab.DVC_ID,cab.DVC_Anulado,cab.DVC_NC,cab.DVC_Serie,cab.DVC_Numero,CONCAT(cab.DVC_Serie,'-',cab.DVC_Numero) as Nserie ,cab.TD_ID,tipo.TD_Descripcion, cab.DVC_Fecha,  DATE_FORMAT(cab.DVC_Fecha,'%d/%m/%Y') as fecha,varios.PVCL_RazonSocial,varios.PVCL_NroDocIdentidad,varios.PVCL_Direccion,cab.DVC_Total from DocVentaCab as cab inner join Tipo_Documento as tipo on cab.TD_ID=tipo.TD_ID inner join cpvarios as varios on cab.PVCL_ID=varios.PVCL_ID  where cab.Alm_Id="+caja1 +" and cab.DVC_Serie=1  and Empresa=1  and cab.TD_ID<>7    order by cab.DVC_ID DESC";
    }
 
 
